@@ -1,0 +1,43 @@
+================================================================================
+          HƯỚNG DẪN SỬ DỤNG GOODBYEDPI - PHIÊN BẢN TỐI ƯU CHO VIỆT NAM
+================================================================================
+
+1. BẠN NÊN CHỌN FILE NÀO ĐỂ DÙNG?
+---------------------------------
+(*) CÁCH 1 (Khuyên dùng nhất - Chạy ngầm vĩnh viễn):
+    - Chạy file: "service_install_vietnam.cmd"
+    - Tác dụng: Cài đặt GoodbyeDPI thành dịch vụ chạy ngầm của Windows.
+      Tự động khởi động cùng máy, KHÔNG hiện cửa sổ đen, chỉ tốn ~3MB RAM.
+      Chỉ vượt chặn các trang trong file "vietnam-blacklist.txt" (Steam, Medium, 
+      Discord, web bị chặn...), tuyệt đối an toàn cho game VN và app ngân hàng.
+
+(*) CÁCH 2 (Dùng tạm thời khi cần):
+    - Chạy file: "1_vietnam_optimized.cmd"
+    - Giữ cửa sổ CMD mở trong suốt quá trình duyệt web/chơi game. Tắt đi là hết.
+
+(*) CÁCH 3 (Khi muốn vào web lạ chưa có trong danh sách blacklist):
+    - Chạy file: "2_vietnam_all_traffic.cmd" (hoặc "service_install_vietnam_all.cmd")
+
+(*) ĐỔI DNS NHANH:
+    - Chạy file: "dns_quick_switch.cmd" nếu bạn chưa đổi DNS trên máy tính.
+      Chọn [1] để chuyển sang Cloudflare 1.1.1.1 siêu nhanh.
+
+(*) GỠ BỎ:
+    - Khi không muốn dùng nữa, chỉ cần chạy file: "service_remove.cmd"
+
+
+2. LƯU Ý BẮT BUỘC ĐỂ KHÔNG BỊ LỖI
+---------------------------------
+- Nhà mạng tại Việt Nam (Viettel, VNPT, FPT) chặn cả 2 tầng: DNS và SNI.
+- Hãy bật "DNS bảo mật" (DoH) trên trình duyệt của bạn:
+  + Chrome / Cốc Cốc / Edge / Brave: Cài đặt -> Quyền riêng tư & Bảo mật 
+    -> Bảo mật -> Bật "Sử dụng DNS an toàn" -> Chọn Cloudflare (1.1.1.1) hoặc Google (8.8.8.8).
+  + Firefox: Cài đặt -> Cài đặt mạng -> Bật DNS over HTTPS -> Chọn Cloudflare.
+
+3. CÁCH THÊM TRANG WEB MỚI VÀO BLACKLIST
+---------------------------------------
+- Mở file "vietnam-blacklist.txt" bằng Notepad.
+- Thêm tên miền bạn muốn vào cuối file (mỗi dòng 1 tên miền, ví dụ: abc.com).
+- Lưu lại. Nếu đang chạy service, hãy chạy lại "service_install_vietnam.cmd" 
+  để áp dụng danh sách mới.
+================================================================================

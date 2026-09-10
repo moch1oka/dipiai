@@ -1,0 +1,37 @@
+# ==============================================================================
+# DANH SACH WEBSITE BI CHAN PHO BIEN TAI VIET NAM (VIETNAM BLACKLIST)
+# GoodbyeDPI se chi can thiep vao cac domain va subdomain duoc liet ke o day.
+# Moi trang khac (Ngan hang, Game VN, Facebook, Youtube...) se di thang 100%.
+# Ban co the tu do them domain khac vao file nay (moi dong 1 domain).
+# ==============================================================================
+
+# --- Game & Steam ---
+steamcommunity.com
+steampowered.com
+store.steampowered.com
+checkout.steampowered.com
+login.steampowered.com
+help.steampowered.com
+api.steampowered.com
+steamstatic.com
+steam-chat.com
+
+# --- Blog / Publishing / Tin tuc ---
+medium.com
+bbc.com
+bbci.co.uk
+rfa.org
+voatiengviet.com
+voanews.com
+danluan.org
+thevietnamese.org
+luatkhoa.org
+reddit.com
+redd.it
+
+# --- Web Truyen / Anime / Phim ---
+
+
+# --- Chia se file / Torrent ---
+1337x.to
+nyaa.si
