@@ -7,11 +7,6 @@
 # ==============================================================================
 
 # --- Gaming & Nen tang ---
-discord.com
-discordapp.com
-discord.gg
-discordapp.net
-discord.media
 steamcommunity.com
 steampowered.com
 steamstatic.com
