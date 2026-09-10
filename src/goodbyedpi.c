@@ -810,6 +810,7 @@ int main(int argc, char *argv[]) {
                 }
                 puts("DNS address parameter error!");
                 exit(ERROR_DNS_V4_ADDR);
+                break;
             case '!': // --dnsv6-addr
                 if (!do_dnsv6_redirect && inet_pton(AF_INET6, optarg, dnsv6_addr.s6_addr) == 1) {
                     do_dnsv6_redirect = 1;
@@ -819,6 +820,7 @@ int main(int argc, char *argv[]) {
                 }
                 puts("DNS address parameter error!");
                 exit(ERROR_DNS_V6_ADDR);
+                break;
             case 'g': // --dns-port
                 if (!do_dnsv4_redirect) {
                     puts("--dns-port should be used with --dns-addr!\n"
