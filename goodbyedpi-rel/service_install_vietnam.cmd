@@ -33,7 +33,7 @@ sc stop "GoodbyeDPI" >nul 2>&1
 sc delete "GoodbyeDPI" >nul 2>&1
 
 echo [*] Dang dang ky Service moi...
-sc create "GoodbyeDPI" binPath= "\"%CD%\%_arch%\goodbyedpi.exe\" -p -r -s -f 2 -e 2 --reverse-frag --max-payload 1200 --blacklist \"%CD%\vietnam-blacklist.txt\"" start= "auto"
+sc create "GoodbyeDPI" binPath= "\"%CD%\%_arch%\goodbyedpi.exe\" -p -r -s -f 2 -e 2 --reverse-frag --max-payload 1200 -q --blacklist \"%CD%\vietnam-blacklist.txt\"" start= "auto"
 sc description "GoodbyeDPI" "Tien ich vuot chan DPI cho mang Viet Nam (Steam, Medium, Discord...)"
 
 echo [*] Dang khoi dong Service...

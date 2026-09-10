@@ -23,7 +23,7 @@ echo =========================================================================
 echo       GOODBYEDPI - PHIEN BAN TOI UU CHO VIET NAM (VIETNAM OPTIMIZED)
 echo =========================================================================
 echo [*] Nha mang ho tro : Viettel, VNPT, FPT, MobiFone, CMC
-echo [*] Cau hinh toi uu : -p -r -s -f 2 -e 2 --reverse-frag --max-payload 1200
+echo [*] Cau hinh toi uu : -p -r -s -f 2 -e 2 --reverse-frag --max-payload 1200 -q
 echo [*] Danh sach chan  : vietnam-blacklist.txt (Chi can thiep web trong list)
 echo [*] An toan         : Khong anh huong Game, App Ngan Hang, Momo, Zalo
 echo =========================================================================
@@ -34,7 +34,7 @@ echo =========================================================================
 echo.
 
 pushd "%_arch%"
-goodbyedpi.exe -p -r -s -f 2 -e 2 --reverse-frag --max-payload 1200 --blacklist "%~dp0vietnam-blacklist.txt"
+goodbyedpi.exe -p -r -s -f 2 -e 2 --reverse-frag --max-payload 1200 -q --blacklist "%~dp0vietnam-blacklist.txt"
 
 popd
 popd

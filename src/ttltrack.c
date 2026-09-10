@@ -188,9 +188,6 @@ int tcp_handle_incoming(uint32_t srcip[4], uint32_t dstip[4],
 
     debug("trying to add TCP srcport = %hu, dstport = %hu\n", ntohs(srcport), ntohs(dstport));
     return add_tcp_conntrack(srcip, dstip, srcport, dstport, is_ipv6, ttl);
-
-    debug("____tcp_handle_incoming FALSE: srcport = %hu, dstport = %hu\n", ntohs(srcport), ntohs(dstport));
-    return FALSE;
 }
 
 int tcp_handle_outgoing(uint32_t srcip[4], uint32_t dstip[4],

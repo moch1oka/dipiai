@@ -87,6 +87,7 @@ void service_controlhandler(DWORD request)
             deinit_all();
             ServiceStatus.dwWin32ExitCode = 0;
             ServiceStatus.dwCurrentState  = SERVICE_STOPPED;
+            break;
         default:
             break;
     }

@@ -34,10 +34,12 @@
     -> Bảo mật -> Bật "Sử dụng DNS an toàn" -> Chọn Cloudflare (1.1.1.1) hoặc Google (8.8.8.8).
   + Firefox: Cài đặt -> Cài đặt mạng -> Bật DNS over HTTPS -> Chọn Cloudflare.
 
-3. CÁCH THÊM TRANG WEB MỚI VÀO BLACKLIST
----------------------------------------
-- Mở file "vietnam-blacklist.txt" bằng Notepad.
-- Thêm tên miền bạn muốn vào cuối file (mỗi dòng 1 tên miền, ví dụ: abc.com).
-- Lưu lại. Nếu đang chạy service, hãy chạy lại "service_install_vietnam.cmd" 
-  để áp dụng danh sách mới.
+3. CÁCH THÊM TRANG WEB MỚI HOẶC CẬP NHẬT BLACKLIST
+---------------------------------------------------
+- Tự động cập nhật: Chạy file "update_blacklist.cmd" để tải danh sách mới nhất từ GitHub.
+- Hoặc thêm thủ công:
+  + Mở file "vietnam-blacklist.txt" bằng Notepad.
+  + Thêm tên miền bạn muốn vào cuối file (mỗi dòng 1 tên miền, ví dụ: abc.com).
+  + Lưu lại. Nếu đang chạy service, hãy chạy lại "service_install_vietnam.cmd" 
+    để áp dụng danh sách mới.
 ================================================================================

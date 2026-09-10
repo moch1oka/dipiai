@@ -222,8 +222,10 @@ static void add_filter_str(int proto, int port) {
 
 static void add_ip_id_str(int id) {
     char *newstr;
-    const char *ipid = " or ip.Id == %d";
+    const char *ipid = " or ip.Id == %d" IPID_TEMPLATE;
     char *addfilter = malloc(strlen(ipid) + 16);
+    if (!addfilter)
+        return;
 
     sprintf(addfilter, ipid, id);
 
@@ -234,6 +236,8 @@ static void add_ip_id_str(int id) {
     newstr = repl_str(filter_passive_string, IPID_TEMPLATE, addfilter);
     free(filter_passive_string);
     filter_passive_string = newstr;
+
+    free(addfilter);
 }
 
 static void add_maxpayloadsize_str(unsigned short maxpayload) {
@@ -244,12 +248,16 @@ static void add_maxpayloadsize_str(unsigned short maxpayload) {
           "or tcp.Payload32[0] == 0x47455420 or tcp.Payload32[0] == 0x504F5354 " \
           "or (tcp.Payload[0] == 0x16 and tcp.Payload[1] == 0x03 and tcp.Payload[2] <= 0x03): true)";
     char *addfilter = malloc(strlen(maxpayloadsize_str) + 16);
+    if (!addfilter)
+        return;
 
     sprintf(addfilter, maxpayloadsize_str, maxpayload);
 
     newstr = repl_str(filter_string, MAXPAYLOADSIZE_TEMPLATE, addfilter);
     free(filter_string);
     filter_string = newstr;
+
+    free(addfilter);
 }
 
 static void finalize_filter_strings() {
@@ -448,7 +456,7 @@ static int extract_sni(const char *pktdata, unsigned int pktlen,
             */
             d[ptr+3] - d[ptr+5] == 2 && d[ptr+5] - d[ptr+8] == 3)
             {
-                if (ptr + 8 + d[ptr+8] > pktlen) {
+                if (ptr + 9 + d[ptr+8] > pktlen) {
                     return FALSE;
                 }
                 hnaddr = &d[ptr+9];

@@ -2,36 +2,63 @@
 # DANH SACH WEBSITE BI CHAN PHO BIEN TAI VIET NAM (VIETNAM BLACKLIST)
 # GoodbyeDPI se chi can thiep vao cac domain va subdomain duoc liet ke o day.
 # Moi trang khac (Ngan hang, Game VN, Facebook, Youtube...) se di thang 100%.
-# Ban co the tu do them domain khac vao file nay (moi dong 1 domain).
+# GoodbyeDPI tu dong match tat ca subdomain (vi du: steamcommunity.com se match ca
+# cdn.steamcommunity.com). Ban co the them domain vao cuoi file (moi dong 1 domain).
 # ==============================================================================
 
-# --- Game & Steam ---
+# --- Gaming & Nen tang ---
+discord.com
+discordapp.com
+discord.gg
+discordapp.net
+discord.media
 steamcommunity.com
 steampowered.com
-store.steampowered.com
-checkout.steampowered.com
-login.steampowered.com
-help.steampowered.com
-api.steampowered.com
 steamstatic.com
 steam-chat.com
+steamgames.com
+steamcontent.com
+steamusercontent.com
+steamcdn-a.akamaihd.net
 
-# --- Blog / Publishing / Tin tuc ---
+# --- Blog / Publishing / Cong dong ---
 medium.com
+reddit.com
+redd.it
+redditmedia.com
+redditstatic.com
+pastebin.com
+archive.org
+
+# --- Tin tuc quoc te & Xa hoi ---
 bbc.com
+bbc.co.uk
 bbci.co.uk
 rfa.org
 voatiengviet.com
 voanews.com
+rfi.fr
 danluan.org
 thevietnamese.org
 luatkhoa.org
-reddit.com
-redd.it
+luatkhoa.com
+thoibao.de
 
-# --- Web Truyen / Anime / Phim ---
-
-
-# --- Chia se file / Torrent ---
+# --- Chia se file / Torrent / Manga ---
 1337x.to
 nyaa.si
+thepiratebay.org
+rutracker.org
+fitgirl-repacks.site
+yts.mx
+mangadex.org
+
+# --- San giao dich Tien ma hoa / Crypto ---
+binance.com
+binance.me
+binance.info
+bnapp.org
+bybit.com
+okx.com
+coinbase.com
+remitano.com
