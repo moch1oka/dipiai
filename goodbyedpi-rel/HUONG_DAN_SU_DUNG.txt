@@ -9,7 +9,7 @@
     - Tác dụng: Cài đặt GoodbyeDPI thành dịch vụ chạy ngầm của Windows.
       Tự động khởi động cùng máy, KHÔNG hiện cửa sổ đen, chỉ tốn ~3MB RAM.
       Chỉ vượt chặn các trang trong file "vietnam-blacklist.txt" (Steam, Medium, 
-      Discord, web bị chặn...), tuyệt đối an toàn cho game VN và app ngân hàng.
+      Reddit, web bị chặn...), tuyệt đối an toàn cho game VN và app ngân hàng.
 
 (*) CÁCH 2 (Dùng tạm thời khi cần):
     - Chạy file: "1_vietnam_optimized.cmd"

@@ -1,181 +1,115 @@
-GoodbyeDPI — Deep Packet Inspection circumvention utility
-=========================
+# GoodbyeDPI - Phiên bản Tối ưu cho Mạng Việt Nam
 
-This software designed to bypass Deep Packet Inspection systems found in many Internet Service Providers which block access to certain websites.
+Phần mềm vượt tường lửa DPI (Deep Packet Inspection) của các nhà mạng Việt Nam (Viettel, VNPT, FPT, MobiFone, CMC). Giúp truy cập các dịch vụ bị chặn như **Steam, Discord, Medium, Reddit, BBC, Torrent...** mà không cần sử dụng VPN, không làm giảm tốc độ mạng và không làm tăng độ trễ (ping).
 
-It handles DPI connected using optical splitter or port mirroring (**Passive DPI**) which do not block any data but just replying faster than requested destination, and **Active DPI** connected in sequence.
+Dựa trên dự án gốc [GoodbyeDPI](https://github.com/ValdikSS/GoodbyeDPI) của ValdikSS, được tinh chỉnh cấu hình, tối ưu bộ lọc blacklist và vá các lỗi mã nguồn chuyên biệt cho hạ tầng mạng tại Việt Nam.
 
-**Windows 7, 8, 8.1, 10 or 11** with administrator privileges required.
+---
 
-# Quick start
+## 1. Điểm Khác Biệt So Với Bản Gốc
 
-* **For Russia**: Download [latest version from Releases page](https://github.com/ValdikSS/GoodbyeDPI/releases), unpack the file and run **1_russia_blacklist_dnsredir.cmd** script.
-* For other countries: Download [latest version from Releases page](https://github.com/ValdikSS/GoodbyeDPI/releases), unpack the file and run **2_any_country_dnsredir.cmd**.
+* **Cấu hình tối ưu cho ISP Việt Nam**: Nhà mạng Việt Nam chặn ở 2 tầng (DNS Hijacking và SNI Inspection). Cấu hình sử dụng `-p -r -s -f 2 -e 2 --reverse-frag --max-payload 1200 -q`, tránh sử dụng gói tin giả (Fake Request / wrong-chksum) vốn dễ bị một số router GPON nhà mạng chặn drop nhầm.
+* **Chặn QUIC/HTTP3 (`-q`)**: Ngăn trình duyệt kết nối qua giao thức UDP 443 chưa được phân mảnh, tự động ép về TCP HTTPS để vượt chặn triệt để.
+* **Danh sách Blacklist chọn lọc (`vietnam-blacklist.txt`)**: Chỉ can thiệp vào các trang bị chặn tại Việt Nam. Toàn bộ lưu lượng khác (App ngân hàng, Momo, Zalo, game trong nước, Youtube, Facebook...) đi thẳng 100%, không bị ảnh hưởng.
+* **Tự động yêu cầu quyền Administrator**: Tất cả script `.cmd` đều tích hợp cơ chế tự động mở hộp thoại UAC xin quyền Admin nếu người dùng quên click "Run as administrator".
+* **Công cụ đổi DNS nhanh (`dns_quick_switch.cmd`)**: Hỗ trợ chuyển đổi nhanh sang Cloudflare (1.1.1.1), Google (8.8.8.8) hoặc khôi phục DHCP mặc định chỉ với 1 phím bấm.
+* **Cập nhật Blacklist 1-click (`update_blacklist.cmd`)**: Tự động tải danh sách tên miền mới nhất từ repository và khởi động lại dịch vụ ngầm nếu đang chạy.
+* **Vá lỗi mã nguồn C**:
+  * Sửa lỗi tràn bộ nhớ đệm (out-of-bounds array access) trong bộ nạp gói tin giả `fakepackets.c`.
+  * Sửa lỗi đọc tràn 1 byte (buffer over-read) khi kiểm tra độ dài SNI trong `goodbyedpi.c`.
+  * Khắc phục lỗi tham số `--ip-id` bị vô hiệu hoá từ lần gọi thứ hai trở đi.
+  * Xử lý cảnh báo chuyển nhánh switch-case thiếu `break` trong `service.c`.
+  * Bổ sung cơ chế chuyển đổi chữ hoa/thường (case-insensitive) cho danh sách tên miền.
 
-These scripts launch GoodbyeDPI in recommended mode with DNS resolver redirection to Yandex DNS on non-standard port (to prevent DNS poisoning).  
-If it works — congratulations! You can use it as-is or configure further.
+---
 
-# How to use
+## 2. Hướng Dẫn Sử Dụng Nhanh
 
-Download [latest version from Releases page](https://github.com/ValdikSS/GoodbyeDPI/releases) and run.
+Tải bản phát hành mới nhất từ mục **Releases**, giải nén ra thư mục bất kỳ trên máy (ổ C, D, E...):
 
-## Supported arguments
-To get relevant information about your version of the program, use the -h (--help) argument at startup.
+### Cách 1: Cài đặt chạy ngầm vĩnh viễn (Khuyên dùng)
+1. Chạy file **`service_install_vietnam.cmd`**.
+2. Phần mềm sẽ được đăng ký thành Windows Service, tự động chạy ngầm mỗi khi bật máy.
+3. Không tốn tài nguyên (chiếm dưới 4MB RAM, CPU xấp xỉ 0%), không xuất hiện cửa sổ dòng lệnh.
+4. Khi không muốn dùng nữa, chỉ cần chạy file **`service_remove.cmd`**.
+
+### Cách 2: Chạy tạm thời khi cần
+1. Chạy file **`1_vietnam_optimized.cmd`**.
+2. Giữ nguyên cửa sổ CMD trong suốt quá trình sử dụng. Khi đóng cửa sổ, phần mềm sẽ dừng lại.
+
+### Cách 3: Bỏ chặn toàn bộ lưu lượng (Không dùng Blacklist)
+* Chạy **`2_vietnam_all_traffic.cmd`** (hoặc **`service_install_vietnam_all.cmd`** nếu muốn cài service).
+* Chế độ này sẽ áp dụng kỹ thuật phân mảnh cho tất cả các kết nối HTTPS ra ngoài Internet.
+
+---
+
+## 3. Lưu Ý Bắt Buộc (Tránh Bị Chặn Tầng DNS)
+
+Các nhà mạng tại Việt Nam thường áp dụng chặn ở tầng phân giải tên miền (DNS) trước khi gói tin đến tầng DPI. Để đảm bảo hiệu quả 100%, bạn cần bật tính năng **DNS bảo mật (DoH - DNS over HTTPS)** trên trình duyệt:
+
+* **Google Chrome / Cốc Cốc / Microsoft Edge / Brave**:
+  * Vào `Cài đặt` -> `Quyền riêng tư và bảo mật` -> `Bảo mật`.
+  * Bật mục `Sử dụng hệ thống tên miền (DNS) bảo mật`.
+  * Chọn nhà cung cấp: **Cloudflare (1.1.1.1)** hoặc **Google (Public DNS)**.
+* **Mozilla Firefox**:
+  * Vào `Cài đặt` -> `Cài đặt mạng` (dưới cùng) -> Chọn `Cài đặt...`.
+  * Bật `Bật DNS qua HTTPS` -> Chọn chế độ `Bảo vệ tối đa` -> Chọn nhà cung cấp `Cloudflare`.
+
+Nếu muốn đổi DNS toàn hệ thống cho các ứng dụng không phải trình duyệt (như Steam Client, Discord Desktop), hãy sử dụng file **`dns_quick_switch.cmd`** và chọn phím `[1]`.
+
+---
+
+## 4. Danh Sách Tên Miền Blacklist
+
+File **`vietnam-blacklist.txt`** chứa danh sách các website bị chặn phổ biến tại Việt Nam.
+
+GoodbyeDPI hỗ trợ tự động khớp mọi tên miền con (subdomain). Ví dụ:
+* Khai báo `steampowered.com` sẽ tự động bao gồm cả `store.steampowered.com`, `login.steampowered.com`, `checkout.steampowered.com`...
+* Khai báo `steamcommunity.com` sẽ tự động bao gồm cả `cdn.steamcommunity.com`, `api.steamcommunity.com`...
+Do đó không cần phải liệt kê thủ công từng subdomain vào file.
+
+### Cách cập nhật hoặc thêm tên miền mới:
+* **Tự động**: Chạy file `update_blacklist.cmd` để đồng bộ danh sách mới nhất từ GitHub.
+* **Thủ công**: Mở file `vietnam-blacklist.txt` bằng Notepad, thêm tên miền bạn muốn (mỗi dòng 1 tên miền) rồi lưu lại. Nếu đang chạy service, hãy chạy lại `service_install_vietnam.cmd` để dịch vụ nạp cấu hình mới.
+
+---
+
+## 5. Tự Biên Dịch Từ Mã Nguồn (Build From Source)
+
+Yêu cầu môi trường Linux (Ubuntu/Debian) hoặc WSL có cài đặt MinGW-w64:
+
+```bash
+# Cài đặt trình biên dịch MinGW
+sudo apt-get update
+sudo apt-get install -y gcc-mingw-w64 make unzip wget
+
+# Tải thư viện WinDivert
+wget https://reqrypt.org/download/WinDivert-2.2.0-D.zip
+unzip WinDivert-2.2.0-D.zip
+
+# Biên dịch bản 64-bit (x86_64)
+cd src
+make clean
+make CPREFIX=x86_64-w64-mingw32- BIT64=1 WINDIVERTHEADERS=../WinDivert-2.2.0-D/include WINDIVERTLIBS=../WinDivert-2.2.0-D/x64 -j4
+
+# Biên dịch bản 32-bit (i686)
+make clean
+make CPREFIX=i686-w64-mingw32- WINDIVERTHEADERS=../WinDivert-2.2.0-D/include WINDIVERTLIBS=../WinDivert-2.2.0-D/x86 -j4
 ```
-Usage: goodbyedpi.exe [OPTION...]
- -p          block passive DPI
- -q          block QUIC/HTTP3
- -r          replace Host with hoSt
- -s          remove space between host header and its value
- -m          mix Host header case (test.com -> tEsT.cOm)
- -f <value>  set HTTP fragmentation to value
- -k <value>  enable HTTP persistent (keep-alive) fragmentation and set it to value
- -n          do not wait for first segment ACK when -k is enabled
- -e <value>  set HTTPS fragmentation to value
- -a          additional space between Method and Request-URI (enables -s, may break sites)
- -w          try to find and parse HTTP traffic on all processed ports (not only on port 80)
- --port        <value>    additional TCP port to perform fragmentation on (and HTTP tricks with -w)
- --ip-id       <value>    handle additional IP ID (decimal, drop redirects and TCP RSTs with this ID).
-                          This option can be supplied multiple times.
- --dns-addr    <value>    redirect UDP DNS requests to the supplied IP address (experimental)
- --dns-port    <value>    redirect UDP DNS requests to the supplied port (53 by default)
- --dnsv6-addr  <value>    redirect UDPv6 DNS requests to the supplied IPv6 address (experimental)
- --dnsv6-port  <value>    redirect UDPv6 DNS requests to the supplied port (53 by default)
- --dns-verb               print verbose DNS redirection messages
- --blacklist   <txtfile>  perform circumvention tricks only to host names and subdomains from
-                          supplied text file (HTTP Host/TLS SNI).
-                          This option can be supplied multiple times.
- --allow-no-sni           perform circumvention if TLS SNI can't be detected with --blacklist enabled.
- --frag-by-sni            if SNI is detected in TLS packet, fragment the packet right before SNI value.
- --set-ttl     <value>    activate Fake Request Mode and send it with supplied TTL value.
-                          DANGEROUS! May break websites in unexpected ways. Use with care (or --blacklist).
- --auto-ttl    [a1-a2-m]  activate Fake Request Mode, automatically detect TTL and decrease
-                          it based on a distance. If the distance is shorter than a2, TTL is decreased
-                          by a2. If it's longer, (a1; a2) scale is used with the distance as a weight.
-                          If the resulting TTL is more than m(ax), set it to m.
-                          Default (if set): --auto-ttl 1-4-10. Also sets --min-ttl 3.
-                          DANGEROUS! May break websites in unexpected ways. Use with care (or --blacklist).
- --min-ttl     <value>    minimum TTL distance (128/64 - TTL) for which to send Fake Request
-                          in --set-ttl and --auto-ttl modes.
- --wrong-chksum           activate Fake Request Mode and send it with incorrect TCP checksum.
-                          May not work in a VM or with some routers, but is safer than set-ttl.
- --wrong-seq              activate Fake Request Mode and send it with TCP SEQ/ACK in the past.
- --native-frag            fragment (split) the packets by sending them in smaller packets, without
-                          shrinking the Window Size. Works faster (does not slow down the connection)
-                          and better.
- --reverse-frag           fragment (split) the packets just as --native-frag, but send them in the
-                          reversed order. Works with the websites which could not handle segmented
-                          HTTPS TLS ClientHello (because they receive the TCP flow "combined").
- --fake-from-hex <value>  Load fake packets for Fake Request Mode from HEX values (like 1234abcDEF).
-                          This option can be supplied multiple times, in this case each fake packet
-                          would be sent on every request in the command line argument order.
- --fake-with-sni <value>  Generate fake packets for Fake Request Mode with given SNI domain name.
-                          The packets mimic Mozilla Firefox 130 TLS ClientHello packet
-                          (with random generated fake SessionID, key shares and ECH grease).
-                          Can be supplied multiple times for multiple fake packets.
- --fake-gen <value>       Generate random-filled fake packets for Fake Request Mode, value of them
-                          (up to 30).
- --fake-resend <value>    Send each fake packet value number of times.
-                          Default: 1 (send each packet once).
- --max-payload [value]    packets with TCP payload data more than [value] won't be processed.
-                          Use this option to reduce CPU usage by skipping huge amount of data
-                          (like file transfers) in already established sessions.
-                          May skip some huge HTTP requests from being processed.
-                          Default (if set): --max-payload 1200.
 
+Repository này cũng đã tích hợp sẵn workflow **GitHub Actions** (`.github/workflows/build.yml`), tự động biên dịch và đóng gói bộ cài hoàn chỉnh mỗi khi có commit mới.
 
-LEGACY modesets:
- -1          -p -r -s -f 2 -k 2 -n -e 2 (most compatible mode)
- -2          -p -r -s -f 2 -k 2 -n -e 40 (better speed for HTTPS yet still compatible)
- -3          -p -r -s -e 40 (better speed for HTTP and HTTPS)
- -4          -p -r -s (best speed)
+---
 
-Modern modesets (more stable, more compatible, faster):
- -5          -f 2 -e 2 --auto-ttl --reverse-frag --max-payload
- -6          -f 2 -e 2 --wrong-seq --reverse-frag --max-payload
- -7          -f 2 -e 2 --wrong-chksum --reverse-frag --max-payload
- -8          -f 2 -e 2 --wrong-seq --wrong-chksum --reverse-frag --max-payload
- -9          -f 2 -e 2 --wrong-seq --wrong-chksum --reverse-frag --max-payload -q (this is the default)
+## 6. Xử Lý Sự Cố Thường Gặp
 
- Note: combination of --wrong-seq and --wrong-chksum generates two different fake packets.
-```
-## How to check
-To check if your ISP's DPI could be circumvented, first make sure that your provider does not poison DNS answers by enabling "Secure DNS (DNS over HTTPS)" option in your browser.
+* **Lỗi không khởi động được service**: Đảm bảo thư mục chứa GoodbyeDPI không nằm trong đường dẫn có chứa ký tự đặc biệt hoặc quyền hạn bị giới hạn. Nên đặt ở ổ đĩa thông thường như `C:\GoodbyeDPI` hoặc `D:\GoodbyeDPI`.
+* **Trùng lặp driver WinDivert**: Nếu trước đó bạn từng sử dụng Zapret, ByeDPI hoặc phiên bản GoodbyeDPI khác, hãy chạy file `service_remove.cmd` để dọn dẹp sạch các service và driver cũ trước khi cài lại.
+* **Xung đột phần mềm mạng**: Tính năng `Advanced Stream Detect` trên các card mạng Killer Network (Intel/Qualcomm) có thể xung đột với WinDivert. Hãy tắt tính năng này trong Killer Control Center nếu gặp tình trạng mất mạng.
 
-* **Chrome**: Settings → [Privacy and security](chrome://settings/security) → Use secure DNS → With: NextDNS
-* **Firefox**: [Settings](about:preferences) → Network Settings → Enable DNS over HTTPS → Use provider: NextDNS
+---
 
-Then run the `goodbyedpi.exe` executable without any options. If it works — congratulations! You can use it as-is or configure further, for example by using `--blacklist` option if the list of blocked websites is known and available for your country.
+## 7. Giấy Phép & Ghi Nhận Bản Quyền
 
-If your provider intercepts DNS requests, you may want to use `--dns-addr` option to a public DNS resolver running on non-standard port (such as Yandex DNS `77.88.8.8:1253`) or configure DNS over HTTPS/TLS using third-party applications.
-
-Check the .cmd scripts and modify it according to your preference and network conditions.
-
-# How does it work
-
-### Passive DPI
-
-Most Passive DPI send HTTP 302 Redirect if you try to access blocked website over HTTP and TCP Reset in case of HTTPS, faster than destination website. Packets sent by DPI usually have IP Identification field equal to `0x0000` or `0x0001`, as seen with Russian providers. These packets, if they redirect you to another website (censorship page), are blocked by GoodbyeDPI.
-
-### Active DPI
-
-Active DPI is more tricky to fool. Currently the software uses 7 methods to circumvent Active DPI:
-
-* TCP-level fragmentation for first data packet
-* TCP-level fragmentation for persistent (keep-alive) HTTP sessions
-* Replacing `Host` header with `hoSt`
-* Removing space between header name and value in `Host` header
-* Adding additional space between HTTP Method (GET, POST etc) and URI
-* Mixing case of Host header value
-* Sending fake HTTP/HTTPS packets with low Time-To-Live value, incorrect checksum or incorrect TCP Sequence/Acknowledgement numbers to fool DPI and prevent delivering them to the destination
-
-These methods should not break any website as they're fully compatible with TCP and HTTP standards, yet it's sufficient to prevent DPI data classification and to circumvent censorship. Additional space may break some websites, although it's acceptable by HTTP/1.1 specification (see 19.3 Tolerant Applications).
-
-The program loads WinDivert driver which uses Windows Filtering Platform to set filters and redirect packets to the userspace. It's running as long as console window is visible and terminates when you close the window.
-
-# How to build from source
-
-This project can be built using **GNU Make** and [**mingw**](https://mingw-w64.org). The only dependency is [WinDivert](https://github.com/basil00/Divert).
-
-To build x86 exe run:
-
-`make CPREFIX=i686-w64-mingw32- WINDIVERTHEADERS=/path/to/windivert/include WINDIVERTLIBS=/path/to/windivert/x86`
-
-And for x86_64:
-
-`make CPREFIX=x86_64-w64-mingw32- BIT64=1 WINDIVERTHEADERS=/path/to/windivert/include WINDIVERTLIBS=/path/to/windivert/amd64`
-
-# How to install as Windows Service
-
-Check examples in `service_install_russia_blacklist.cmd`, `service_install_russia_blacklist_dnsredir.cmd` and `service_remove.cmd` scripts.
-
-Modify them according to your own needs.
-
-# Known issues
-
-* Horribly outdated Windows 7 installations are not able to load WinDivert driver due to missing support for SHA256 digital signatures. Install KB3033929 [x86](https://www.microsoft.com/en-us/download/details.aspx?id=46078)/[x64](https://www.microsoft.com/en-us/download/details.aspx?id=46148), or better, update the whole system using Windows Update.
-* Intel/Qualcomm Killer network cards: `Advanced Stream Detect` in Killer Control Center is incompatible with GoodbyeDPI, [disable it](https://github.com/ValdikSS/GoodbyeDPI/issues/541#issuecomment-2296038239).
-* QUIK trading software [may interfere with GoodbyeDPI](https://github.com/ValdikSS/GoodbyeDPI/issues/677#issuecomment-2390595606). First start QUIK, then GoodbyeDPI.
-* ~~Some SSL/TLS stacks unable to process fragmented ClientHello packets, and HTTPS websites won't open. Bug: [#4](https://github.com/ValdikSS/GoodbyeDPI/issues/4), [#64](https://github.com/ValdikSS/GoodbyeDPI/issues/64).~~ Fragmentation issues are fixed in v0.1.7.
-* ~~ESET Antivirus is incompatible with WinDivert driver [#91](https://github.com/ValdikSS/GoodbyeDPI/issues/91). This is most probably antivirus bug, not WinDivert.~~
-
-
-# Similar projects
-
-- **[zapret](https://github.com/bol-van/zapret)** by @bol-van (for MacOS, Linux and Windows)
-- **[Green Tunnel](https://github.com/SadeghHayeri/GreenTunnel)** by @SadeghHayeri (for MacOS, Linux and Windows)
-- **[DPI Tunnel CLI](https://github.com/nomoresat/DPITunnel-cli)** by @zhenyolka (for Linux and routers)
-- **[DPI Tunnel for Android](https://github.com/nomoresat/DPITunnel-android)** by @zhenyolka (for Android)
-- **[PowerTunnel](https://github.com/krlvm/PowerTunnel)** by @krlvm (for Windows, MacOS and Linux)
-- **[PowerTunnel for Android](https://github.com/krlvm/PowerTunnel-Android)** by @krlvm (for Android)
-- **[SpoofDPI](https://github.com/xvzc/SpoofDPI)** by @xvzc (for macOS and Linux)
-- **[SpoofDPI-Platform](https://github.com/r3pr3ss10n/SpoofDPI-Platform)** by @r3pr3ss10n (for Android, macOS, Windows)
-- **[GhosTCP](https://github.com/macronut/ghostcp)** by @macronut (for Windows)
-- **[ByeDPI](https://github.com/hufrea/byedpi)** for Linux/Windows + **[ByeDPIAndroid](https://github.com/dovecoteescapee/ByeDPIAndroid/)** / **[ByeByeDPI](https://github.com/romanvht/ByeByeDPI/)** for Android (no root)
-- **[youtubeUnblock](https://github.com/Waujito/youtubeUnblock/)** by @Waujito (for OpenWRT/Entware routers and Linux)
-
-# Kudos
-
-Thanks @basil00 for [WinDivert](https://github.com/basil00/Divert). That's the main part of this program.
-
-Thanks for every [BlockCheck](https://github.com/ValdikSS/blockcheck) contributor. It would be impossible to understand DPI behaviour without this utility.
+* Dự án dựa trên mã nguồn gốc [GoodbyeDPI](https://github.com/ValdikSS/GoodbyeDPI) của tác giả **ValdikSS** (phát hành theo giấy phép Apache License 2.0).
+* Sử dụng thư viện điều hướng gói tin [WinDivert](https://github.com/basil00/Divert) của tác giả **basil00** (giấy phép GNU LGPLv3).
