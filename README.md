@@ -14,7 +14,10 @@ Dựa trên dự án gốc [GoodbyeDPI](https://github.com/ValdikSS/GoodbyeDPI) 
 * **Tự động yêu cầu quyền Administrator**: Tất cả script `.cmd` đều tích hợp cơ chế tự động mở hộp thoại UAC xin quyền Admin nếu người dùng quên click "Run as administrator".
 * **Công cụ đổi DNS nhanh (`dns_quick_switch.cmd`)**: Hỗ trợ chuyển đổi nhanh sang Cloudflare (1.1.1.1), Google (8.8.8.8) hoặc khôi phục DHCP mặc định chỉ với 1 phím bấm.
 * **Cập nhật Blacklist 1-click (`update_blacklist.cmd`)**: Tự động tải danh sách tên miền mới nhất từ repository và khởi động lại dịch vụ ngầm nếu đang chạy.
-* **Vá lỗi mã nguồn C**:
+* **Vá lỗi và cải tiến mã nguồn C**:
+  * Tự động xử lý lỗi WinDivert Error 1058 (`touch_windivert`): Tự động đánh thức và truy vấn trạng thái WinDivert trong Windows Service Control Manager, chống lỗi dịch vụ bị khoá/vô hiệu hoá.
+  * Hỗ trợ độ trễ giữa các mảnh phân mảnh (`--frag-delay <ms>`): Chống lại các hệ thống DPI có bộ đệm ghép luồng (reassembly buffer).
+  * Sửa lỗi chế độ `--frag-by-sni` khi dùng độc lập.
   * Sửa lỗi tràn bộ nhớ đệm (out-of-bounds array access) trong bộ nạp gói tin giả `fakepackets.c`.
   * Sửa lỗi đọc tràn 1 byte (buffer over-read) khi kiểm tra độ dài SNI trong `goodbyedpi.c`.
   * Khắc phục lỗi tham số `--ip-id` bị vô hiệu hoá từ lần gọi thứ hai trở đi.

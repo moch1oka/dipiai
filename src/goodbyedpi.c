@@ -193,6 +193,7 @@ static struct option long_options[] = {
     {"fake-gen",    required_argument, 0,  'j' },
     {"fake-resend", required_argument, 0,  't' },
     {"debug-exit",  optional_argument, 0,  'x' },
+    {"frag-delay",  required_argument, 0,  '~' },
     {0,             0,                 0,   0  }
 };
 
@@ -315,13 +316,34 @@ BYTE atoub(const char *str, const char *msg) {
 }
 
 
+static void touch_windivert(void) {
+    SC_HANDLE scm = OpenSCManagerW(NULL, NULL, SC_MANAGER_CONNECT);
+    if (scm) {
+        SC_HANDLE svc = OpenServiceW(scm, L"WinDivert", SERVICE_QUERY_STATUS);
+        if (svc) {
+            SERVICE_STATUS status;
+            QueryServiceStatus(svc, &status);
+            CloseServiceHandle(svc);
+        }
+        CloseServiceHandle(scm);
+    }
+}
+
 static HANDLE init(char *filter, UINT64 flags) {
     LPTSTR errormessage = NULL;
     DWORD errorcode = 0;
+    touch_windivert();
     filter = WinDivertOpen(filter, WINDIVERT_LAYER_NETWORK, 0, flags);
     if (filter != INVALID_HANDLE_VALUE)
         return filter;
     errorcode = GetLastError();
+    if (errorcode == 1058) {
+        touch_windivert();
+        filter = WinDivertOpen(filter, WINDIVERT_LAYER_NETWORK, 0, flags);
+        if (filter != INVALID_HANDLE_VALUE)
+            return filter;
+        errorcode = GetLastError();
+    }
     FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
                   FORMAT_MESSAGE_IGNORE_INSERTS,
                   NULL, errorcode, MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT),
@@ -337,6 +359,9 @@ static HANDLE init(char *filter, UINT64 flags) {
                "sc delete windivert\n"
                "sc stop windivert14\n"
                "sc delete windivert14\n");
+    else if (errorcode == 1058)
+        printf("The WinDivert service is disabled or in an inconsistent state.\n"
+               "Please run 'sc stop windivert' and 'sc delete windivert' as administrator.\n");
     else if (errorcode == 1275)
         printf("This error occurs for various reasons, including:\n"
                "the WinDivert driver is blocked by security software; or\n"
@@ -630,6 +655,7 @@ int main(int argc, char *argv[]) {
     unsigned int http_fragment_size = 0;
     unsigned int https_fragment_size = 0;
     unsigned int current_fragment_size = 0;
+    unsigned int fragment_delay_ms = 0;
     unsigned short max_payload_size = 0;
     BYTE should_send_fake = 0;
     BYTE ttl_of_fake_packet = 0;
@@ -871,6 +897,10 @@ int main(int argc, char *argv[]) {
                 break;
             case '>': // --frag-by-sni
                 do_fragment_by_sni = 1;
+                do_fragment_https = 1;
+                do_native_frag = 1;
+                if (https_fragment_size == 0)
+                    https_fragment_size = 2;
                 break;
             case '$': // --set-ttl
                 do_auto_ttl = auto_ttl_1 = auto_ttl_2 = auto_ttl_max = 0;
@@ -969,6 +999,9 @@ int main(int argc, char *argv[]) {
             case 'x': // --debug-exit
                 debug_exit = true;
                 break;
+            case '~': // --frag-delay
+                fragment_delay_ms = atousi(optarg, "Fragment delay parameter error!");
+                break;
             default:
                 puts("Usage: goodbyedpi.exe [OPTION...]\n"
                 " -p          block passive DPI\n"
@@ -1014,6 +1047,7 @@ int main(int argc, char *argv[]) {
                 " --reverse-frag           fragment (split) the packets just as --native-frag, but send them in the\n"
                 "                          reversed order. Works with the websites which could not handle segmented\n"
                 "                          HTTPS TLS ClientHello (because they receive the TCP flow \"combined\").\n"
+                " --frag-delay   <ms>       delay in milliseconds between fragmented packet pieces.\n"
                 " --fake-from-hex <value>  Load fake packets for Fake Request Mode from HEX values (like 1234abcDEF).\n"
                 "                          This option can be supplied multiple times, in this case each fake packet\n"
                 "                          would be sent on every request in the command line argument order.\n"
@@ -1086,7 +1120,8 @@ int main(int argc, char *argv[]) {
            "Fake requests, wrong SEQ/ACK: %d\n"     /* 19 */
            "Fake requests, custom payloads: %d\n"   /* 20 */
            "Fake requests, resend: %d\n"            /* 21 */
-           "Max payload size: %hu\n",               /* 22 */
+           "Max payload size: %hu\n"                /* 22 */
+           "Fragment delay: %u ms\n",               /* 23 */
            do_passivedpi, do_block_quic,                          /* 1 */
            (do_fragment_http ? http_fragment_size : 0),           /* 2 */
            (do_fragment_http_persistent ? http_fragment_size : 0),/* 3 */
@@ -1110,7 +1145,8 @@ int main(int argc, char *argv[]) {
            do_wrong_seq,    /* 19 */
            fakes_count,     /* 20 */
            fakes_resend,    /* 21 */
-           max_payload_size /* 22 */
+           max_payload_size, /* 22 */
+           fragment_delay_ms /* 23 */
           );
 
     if (do_fragment_http && http_fragment_size > 2 && !do_native_frag) {
@@ -1416,7 +1452,7 @@ int main(int argc, char *argv[]) {
                     }
                     else if (do_fragment_https && ppTcpHdr->DstPort != htons(80)) {
                         if (do_fragment_by_sni && sni_ok) {
-                            current_fragment_size = (void*)host_addr - packet_data;
+                            current_fragment_size = (unsigned int)((char*)host_addr - (char*)packet_data);
                         } else {
                             current_fragment_size = https_fragment_size;
                         }
@@ -1427,6 +1463,9 @@ int main(int argc, char *argv[]) {
                                             packet_dataLen,packet_v4, packet_v6,
                                             ppIpHdr, ppIpV6Hdr, ppTcpHdr,
                                             current_fragment_size, do_reverse_frag);
+
+                        if (fragment_delay_ms > 0)
+                            Sleep(fragment_delay_ms);
 
                         send_native_fragment(w_filter, addr, packet, packetLen, packet_data,
                                             packet_dataLen,packet_v4, packet_v6,
