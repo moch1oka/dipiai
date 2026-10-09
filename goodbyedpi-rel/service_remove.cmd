@@ -15,7 +15,7 @@ if %errorlevel% neq 0 (
 
 cls
 echo =========================================================================
-echo                   GO BO GOODBYEDPI VA CAC DRIVER LIEN QUAN
+echo                       GO BO GOODBYEDPI SERVICE
 echo =========================================================================
 echo.
 
@@ -23,7 +23,7 @@ echo [*] Dang dung va xoa dich vu GoodbyeDPI...
 sc stop "GoodbyeDPI" >nul 2>&1
 sc delete "GoodbyeDPI" >nul 2>&1
 
-echo [*] Dang don dep cac driver WinDivert...
+echo [*] Dang don dep driver WinDivert...
 sc stop "WinDivert" >nul 2>&1
 sc delete "WinDivert" >nul 2>&1
 sc stop "WinDivert14" >nul 2>&1
@@ -31,8 +31,7 @@ sc delete "WinDivert14" >nul 2>&1
 
 echo.
 echo =========================================================================
-echo [OK] DA GO BO HOAN TOAN DICH VU VA DRIVER!
-echo      He thong mang da tro ve trang thai mac dinh.
+echo [OK] Da go bo dich vu va driver thanh cong.
 echo =========================================================================
 echo.
 pause

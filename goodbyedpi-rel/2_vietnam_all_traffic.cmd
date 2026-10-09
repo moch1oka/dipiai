@@ -20,14 +20,12 @@ if defined PROCESSOR_ARCHITEW6432 (set _arch=x86_64)
 
 cls
 echo =========================================================================
-echo    GOODBYEDPI - CHE DO TOAN BO LUU LUONG (BO CHAN CHO MOI TRANG WEB)
+echo       GOODBYEDPI - CHE DO TOAN BO LUU LUONG (ALL TRAFFIC)
 echo =========================================================================
-echo [*] Tac dung        : Bo chan tat ca cac trang web ma khong can Blacklist
-echo [*] Cau hinh toi uu : -p -r -s -f 2 -e 2 --reverse-frag --max-payload 1200 -q
-echo [*] Bang thong      : Bo qua goi tin lon (CPU ~ 0%%, khong bop toc do)
-echo =========================================================================
-echo [!] LUU Y: Hay bat "Secure DNS" tren trinh duyet (Cloudflare 1.1.1.1).
-echo [!] Giu cua so nay mo trong suot qua trinh duyet web/choi game.
+echo [*] Che do         : Toan bo luu luong (khong can blacklist)
+echo [*] Tham so        : -p -r -s -f 2 -e 2 --reverse-frag --max-payload 1200 -q
+echo [*] Luu y          : Bat Secure DNS (DoH) tren trinh duyet neu can
+echo [*] Giu cua so nay mo trong suot qua trinh su dung
 echo =========================================================================
 echo.
 

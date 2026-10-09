@@ -20,10 +20,9 @@ if defined PROCESSOR_ARCHITEW6432 (set _arch=x86_64)
 
 cls
 echo =========================================================================
-echo    CAI DAT GOODBYEDPI CHAY NGAM VINH VIEN (TOAN BO LUU LUONG)
+echo              CAI DAT GOODBYEDPI SERVICE (ALL TRAFFIC)
 echo =========================================================================
-echo [*] Tac dung: Bo chan TAT CA cac trang web ngay khi khoi dong Windows.
-echo [*] Khong co cua so hien len, chay sieu nhe ngam duoi he thong.
+echo [*] Che do: Chay ngam tu dong cung Windows (toan bo luu luong)
 echo =========================================================================
 echo.
 
@@ -33,15 +32,15 @@ sc delete "GoodbyeDPI" >nul 2>&1
 
 echo [*] Dang dang ky Service moi...
 sc create "GoodbyeDPI" binPath= "\"%CD%\%_arch%\goodbyedpi.exe\" -p -r -s -f 2 -e 2 --reverse-frag --max-payload 1200 -q" start= "auto"
-sc description "GoodbyeDPI" "Tien ich vuot chan DPI cho moi trang web tren Windows"
+sc description "GoodbyeDPI" "GoodbyeDPI Windows Service (All Traffic)"
 
 echo [*] Dang khoi dong Service...
 sc start "GoodbyeDPI"
 
 echo.
 echo =========================================================================
-echo [OK] DA CAI DAT VA KHOI DONG THANH CONG!
-echo      (Neu muon go bo, chi can chay file service_remove.cmd)
+echo [OK] Cai dat va khoi dong service thanh cong.
+echo      Go bo service: chay service_remove.cmd
 echo =========================================================================
 echo.
 popd

@@ -18,8 +18,8 @@ cls
 echo =========================================================================
 echo              CONG CU THIET LAP DNS NHANH CHO MAY TINH
 echo =========================================================================
-echo [1] Doi sang Cloudflare DNS (1.1.1.1 va 1.0.0.1) - [Khuyen dung]
-echo [2] Doi sang Google DNS (8.8.8.8 va 8.8.4.4)
+echo [1] Doi sang Cloudflare DNS (IPv4 + IPv6) - [Khuyen dung]
+echo [2] Doi sang Google DNS (IPv4 + IPv6)
 echo [3] Khoi phuc DNS ve Tu dong (DHCP mac dinh cua nha mang)
 echo [4] Xoa bo nho dem DNS (ipconfig /flushdns)
 echo [0] Thoat
@@ -35,20 +35,20 @@ goto MENU
 
 :CLOUDFLARE
 cls
-echo [*] Dang thiet lap Cloudflare DNS (1.1.1.1 va 1.0.0.1)...
-powershell -Command "Get-NetAdapter | Where-Object {$_.Status -eq 'Up'} | ForEach-Object { Set-DnsClientServerAddress -InterfaceIndex $_.ifIndex -ServerAddresses ('1.1.1.1','1.0.0.1') }"
+echo [*] Dang thiet lap Cloudflare DNS (IPv4 + IPv6)...
+powershell -NoProfile -Command "Get-NetAdapter | Where-Object {$_.Status -eq 'Up'} | ForEach-Object { Set-DnsClientServerAddress -InterfaceIndex $_.ifIndex -ServerAddresses ('1.1.1.1','1.0.0.1','2606:4700:4700::1111','2606:4700:4700::1001') -ErrorAction SilentlyContinue }"
 ipconfig /flushdns >nul
-echo [OK] Da doi sang Cloudflare DNS va xoa cache DNS thanh cong!
+echo [OK] Da doi sang Cloudflare DNS (IPv4 + IPv6) va xoa cache DNS thanh cong!
 echo.
 pause
 goto MENU
 
 :GOOGLE
 cls
-echo [*] Dang thiet lap Google DNS (8.8.8.8 va 8.8.4.4)...
-powershell -Command "Get-NetAdapter | Where-Object {$_.Status -eq 'Up'} | ForEach-Object { Set-DnsClientServerAddress -InterfaceIndex $_.ifIndex -ServerAddresses ('8.8.8.8','8.8.4.4') }"
+echo [*] Dang thiet lap Google DNS (IPv4 + IPv6)...
+powershell -NoProfile -Command "Get-NetAdapter | Where-Object {$_.Status -eq 'Up'} | ForEach-Object { Set-DnsClientServerAddress -InterfaceIndex $_.ifIndex -ServerAddresses ('8.8.8.8','8.8.4.4','2001:4860:4860::8888','2001:4860:4860::8844') -ErrorAction SilentlyContinue }"
 ipconfig /flushdns >nul
-echo [OK] Da doi sang Google DNS va xoa cache DNS thanh cong!
+echo [OK] Da doi sang Google DNS (IPv4 + IPv6) va xoa cache DNS thanh cong!
 echo.
 pause
 goto MENU
@@ -56,7 +56,7 @@ goto MENU
 :DHCP
 cls
 echo [*] Dang khoi phuc DNS ve tu dong (DHCP)...
-powershell -Command "Get-NetAdapter | Where-Object {$_.Status -eq 'Up'} | ForEach-Object { Set-DnsClientServerAddress -InterfaceIndex $_.ifIndex -ResetServerAddresses }"
+powershell -NoProfile -Command "Get-NetAdapter | Where-Object {$_.Status -eq 'Up'} | ForEach-Object { Set-DnsClientServerAddress -InterfaceIndex $_.ifIndex -ResetServerAddresses -ErrorAction SilentlyContinue }"
 ipconfig /flushdns >nul
 echo [OK] Da khoi phuc DNS tu dong thanh cong!
 echo.

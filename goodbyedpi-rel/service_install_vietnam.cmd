@@ -20,11 +20,9 @@ if defined PROCESSOR_ARCHITEW6432 (set _arch=x86_64)
 
 cls
 echo =========================================================================
-echo       CAI DAT GOODBYEDPI CHAY NGAM VINH VIEN (WINDOWS SERVICE)
+echo            CAI DAT GOODBYEDPI SERVICE (VIETNAM OPTIMIZED)
 echo =========================================================================
-echo [*] Sau khi cai dat: GoodbyeDPI se tu dong chay ngam moi khi bat may.
-echo [*] Khong con cua so CMD mau den, chiem duoi 4MB RAM, CPU ~ 0%%.
-echo [*] Tu dong bo chan cac trang trong file: vietnam-blacklist.txt
+echo [*] Che do: Chay ngam tu dong cung Windows voi vietnam-blacklist.txt
 echo =========================================================================
 echo.
 
@@ -34,16 +32,15 @@ sc delete "GoodbyeDPI" >nul 2>&1
 
 echo [*] Dang dang ky Service moi...
 sc create "GoodbyeDPI" binPath= "\"%CD%\%_arch%\goodbyedpi.exe\" -p -r -s -f 2 -e 2 --reverse-frag --max-payload 1200 -q --blacklist \"%CD%\vietnam-blacklist.txt\"" start= "auto"
-sc description "GoodbyeDPI" "Tien ich vuot chan DPI cho mang Viet Nam (Steam, Medium, Reddit...)"
+sc description "GoodbyeDPI" "GoodbyeDPI Windows Service (Vietnam Optimized)"
 
 echo [*] Dang khoi dong Service...
 sc start "GoodbyeDPI"
 
 echo.
 echo =========================================================================
-echo [OK] DA CAI DAT VA KHOI DONG THANH CONG!
-echo      Tu bay gio may tinh cua ban da tu dong vuot chan DPI.
-echo      (Neu muon go bo, chi can chay file service_remove.cmd)
+echo [OK] Cai dat va khoi dong service thanh cong.
+echo      Go bo service: chay service_remove.cmd
 echo =========================================================================
 echo.
 popd

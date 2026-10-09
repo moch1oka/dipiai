@@ -1,45 +1,41 @@
 ================================================================================
-          HƯỚNG DẪN SỬ DỤNG GOODBYEDPI - PHIÊN BẢN TỐI ƯU CHO VIỆT NAM
+          HUONG DAN SU DUNG GOODBYEDPI - VIETNAM OPTIMIZED
 ================================================================================
 
-1. BẠN NÊN CHỌN FILE NÀO ĐỂ DÙNG?
----------------------------------
-(*) CÁCH 1 (Khuyên dùng nhất - Chạy ngầm vĩnh viễn):
-    - Chạy file: "service_install_vietnam.cmd"
-    - Tác dụng: Cài đặt GoodbyeDPI thành dịch vụ chạy ngầm của Windows.
-      Tự động khởi động cùng máy, KHÔNG hiện cửa sổ đen, chỉ tốn ~3MB RAM.
-      Chỉ vượt chặn các trang trong file "vietnam-blacklist.txt" (Steam, Medium, 
-      Reddit, web bị chặn...), tuyệt đối an toàn cho game VN và app ngân hàng.
+1. LUA CHON KICH BAN
+--------------------
+- service_install_vietnam.cmd:
+  Cai dat GoodbyeDPI thanh Windows Service tu khoi dong cung he thong.
+  Ap dung cho cac domain trong vietnam-blacklist.txt.
 
-(*) CÁCH 2 (Dùng tạm thời khi cần):
-    - Chạy file: "1_vietnam_optimized.cmd"
-    - Giữ cửa sổ CMD mở trong suốt quá trình duyệt web/chơi game. Tắt đi là hết.
+- 1_vietnam_optimized.cmd:
+  Chay truc tiep trong cua so console voi vietnam-blacklist.txt.
+  Can giu cua so mo trong suot qua trinh su dung.
 
-(*) CÁCH 3 (Khi muốn vào web lạ chưa có trong danh sách blacklist):
-    - Chạy file: "2_vietnam_all_traffic.cmd" (hoặc "service_install_vietnam_all.cmd")
+- 2_vietnam_all_traffic.cmd / service_install_vietnam_all.cmd:
+  Xu ly toan bo luu luong (khong loc theo blacklist).
 
-(*) ĐỔI DNS NHANH:
-    - Chạy file: "dns_quick_switch.cmd" nếu bạn chưa đổi DNS trên máy tính.
-      Chọn [1] để chuyển sang Cloudflare 1.1.1.1 siêu nhanh.
+- dns_quick_switch.cmd:
+  Doi nhanh DNS may tinh (IPv4 + IPv6) sang Cloudflare hoac Google.
 
-(*) GỠ BỎ:
-    - Khi không muốn dùng nữa, chỉ cần chạy file: "service_remove.cmd"
+- service_remove.cmd:
+  Dung va go bo hoan toan service va driver WinDivert.
 
 
-2. LƯU Ý BẮT BUỘC ĐỂ KHÔNG BỊ LỖI
----------------------------------
-- Nhà mạng tại Việt Nam (Viettel, VNPT, FPT) chặn cả 2 tầng: DNS và SNI.
-- Hãy bật "DNS bảo mật" (DoH) trên trình duyệt của bạn:
-  + Chrome / Cốc Cốc / Edge / Brave: Cài đặt -> Quyền riêng tư & Bảo mật 
-    -> Bảo mật -> Bật "Sử dụng DNS an toàn" -> Chọn Cloudflare (1.1.1.1) hoặc Google (8.8.8.8).
-  + Firefox: Cài đặt -> Cài đặt mạng -> Bật DNS over HTTPS -> Chọn Cloudflare.
+2. CAU HINH SECURE DNS (DoH)
+----------------------------
+Can bat DNS bao mat tren trinh duyet de tranh bi chan o tang DNS:
+- Chrome / Edge / Brave / Coc Coc:
+  Cai dat -> Quyen rieng tu & Bao mat -> Bao mat -> Bat "Su dung DNS an toan"
+  -> Chon nha cung cap (Cloudflare 1.1.1.1 hoac Google 8.8.8.8).
+- Firefox:
+  Cai dat -> Cai dat mang -> Bat DNS over HTTPS -> Chon Cloudflare.
 
-3. CÁCH THÊM TRANG WEB MỚI HOẶC CẬP NHẬT BLACKLIST
----------------------------------------------------
-- Tự động cập nhật: Chạy file "update_blacklist.cmd" để tải danh sách mới nhất từ GitHub.
-- Hoặc thêm thủ công:
-  + Mở file "vietnam-blacklist.txt" bằng Notepad.
-  + Thêm tên miền bạn muốn vào cuối file (mỗi dòng 1 tên miền, ví dụ: abc.com).
-  + Lưu lại. Nếu đang chạy service, hãy chạy lại "service_install_vietnam.cmd" 
-    để áp dụng danh sách mới.
+
+3. QUAN LY BLACKLIST
+--------------------
+- Cap nhat tu dong: Chay update_blacklist.cmd.
+- Them thu cong:
+  Mo file vietnam-blacklist.txt va them domain vao danh sach (moi dong 1 domain).
+  Neu dang chay service, khoi dong lai service de ap dung thay doi.
 ================================================================================

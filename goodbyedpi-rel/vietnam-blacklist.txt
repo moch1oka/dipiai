@@ -1,9 +1,7 @@
 # ==============================================================================
-# DANH SACH WEBSITE BI CHAN PHO BIEN TAI VIET NAM (VIETNAM BLACKLIST)
-# GoodbyeDPI se chi can thiep vao cac domain va subdomain duoc liet ke o day.
-# Moi trang khac (Ngan hang, Game VN, Facebook, Youtube...) se di thang 100%.
-# GoodbyeDPI tu dong match tat ca subdomain (vi du: steamcommunity.com se match ca
-# cdn.steamcommunity.com). Ban co the them domain vao cuoi file (moi dong 1 domain).
+# DANH SACH WEBSITE BLACKLIST (VIETNAM)
+# GoodbyeDPI chi xu ly cac domain trong danh sach nay.
+# Domain tu dong ap dung cho cac subdomain (vi du: steamcommunity.com).
 # ==============================================================================
 
 # --- Gaming & Nen tang ---

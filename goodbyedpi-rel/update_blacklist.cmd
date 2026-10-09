@@ -5,7 +5,7 @@ title Cap Nhat Danh Sach Blacklist Viet Nam
 pushd "%~dp0"
 
 echo =========================================================================
-echo       CAP NHAT DANH SACH WEBSITE BI CHAN CHO GOODBYEDPI VIET NAM
+echo                     CAP NHAT VIETNAM BLACKLIST
 echo =========================================================================
 echo [*] Dang tai danh sach moi nhat tu GitHub...
 echo.

@@ -22,14 +22,10 @@ cls
 echo =========================================================================
 echo       GOODBYEDPI - PHIEN BAN TOI UU CHO VIET NAM (VIETNAM OPTIMIZED)
 echo =========================================================================
-echo [*] Nha mang ho tro : Viettel, VNPT, FPT, MobiFone, CMC
-echo [*] Cau hinh toi uu : -p -r -s -f 2 -e 2 --reverse-frag --max-payload 1200 -q
-echo [*] Danh sach chan  : vietnam-blacklist.txt (Chi can thiep web trong list)
-echo [*] An toan         : Khong anh huong Game, App Ngan Hang, Momo, Zalo
-echo =========================================================================
-echo [!] LUU Y: Hay bat "Secure DNS" tren trinh duyet (Cloudflare 1.1.1.1)
-echo     de tranh bi nha mang chan DNS truoc khi vao web.
-echo [!] Giu cua so nay mo trong suot qua trinh duyet web/choi game.
+echo [*] Che do         : Blacklist (vietnam-blacklist.txt)
+echo [*] Tham so        : -p -r -s -f 2 -e 2 --reverse-frag --max-payload 1200 -q
+echo [*] Luu y          : Bat Secure DNS (DoH) tren trinh duyet neu can
+echo [*] Giu cua so nay mo trong suot qua trinh su dung
 echo =========================================================================
 echo.
 
